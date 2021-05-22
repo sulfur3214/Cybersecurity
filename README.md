@@ -168,3 +168,9 @@ _TODO: Answer the following questions to fill in the blanks:_
 - _Which URL do you navigate to in order to check that the ELK server is running?
 http://20.39.45.144:5601/app/kibana
 _As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
+
+  - SSH into the Jumbox Machine and run the ansible ontainer.
+  - Enter the command: curl https://github.com/sulfur3214/Cybersecurity/blob/a39fce524f76979cd39ef57d48527384b93ef5e8/Playbooks/install-elk.yml > /etc/ansible/roles/elk_install.yml
+  - Edit the Hosts file to include the IP address for the ELKVM
+  - To run the Playbook: ansible-playbook /etc/ansible/elk_install.yml
+  - http://[your_elk_server_ip]:5601/app/kibanaerify the installation is working by going to http://[your_elk_server_ip]:5601/app/kibana
