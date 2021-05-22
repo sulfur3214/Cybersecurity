@@ -4,7 +4,7 @@ The files in this repository were used to configure the network depicted below.
 
 ![](https://github.com/sulfur321/cybersec-project-1/blob/057eec373a5de4e20683bb570ab780394640349d/Images/Network%20Diagram.png)
 
-These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the _____ file may be used to install only certain pieces of it, such as Filebeat.
+These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the playbook file may be used to install only certain pieces of it, such as Filebeat.
 
 [install_elk.yml](Playbooks/install-elk.yml)
 
@@ -85,8 +85,8 @@ Load balancing ensures that the application will be highly available, in additio
 A load balancer will route client requests across all servers that are capable of fullfilling those requests in a manner that maximizes speed aand capacity to ensure that no one server is overworked. if one server goes offline, the load balancer will redirect the traffic to the remaining servers. In the situation of a DDoS attack, the load balancer will shift the traffic to another server.
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the logs and system metrics.
-- _TODO: What does Filebeat watch for?_
-- _TODO: What does Metricbeat record?_
+- _TODO: What does Filebeat watch for? Filebeat monitor log files or locations, collects events and forward them to Elasticsearch or Logstash for indexing.
+- _TODO: What does Metricbeat record? Metricbeat records metrics from the system and from services running on the server and forward them to Elasticsearch opr Logstash.
 
 The configuration details of each machine may be found below.
 _Note: Use the [Markdown Table Generator](http://www.tablesgenerator.com/markdown_tables) to add/remove values from the table_.
@@ -102,29 +102,39 @@ _Note: Use the [Markdown Table Generator](http://www.tablesgenerator.com/markdow
 
 The machines on the internal network are not exposed to the public Internet. 
 
-Only the _____ machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
-- _TODO: Add whitelisted IP addresses_
+Only the jumpbox machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
+-Personal IP 119.18.1.27
 
-Machines within the network can only be accessed by _____.
+Machines within the network can only be accessed by Jumpbox.
 - _TODO: Which machine did you allow to access your ELK VM? What was its IP address?_
-
+Only the Jumpbox has access to the ELKVM, the Jumpbox IP address is 10.0.0.1 and the ELKVM is 10.0.0.4
 A summary of the access policies in place can be found in the table below.
 
 | Name     | Publicly Accessible | Allowed IP Addresses |
 |----------|---------------------|----------------------|
-| Jump Box | Yes/No              | 10.0.0.1 10.0.0.2    |
-|          |                     |                      |
-|          |                     |                      |
+| Jump Box | Yes              | Personal    |
+|     Load Balancer     |       yes              |         open             |
+|       Web-1   |             No        |           10.0.0.1           |
+| Web-2 | No | 10.0.0.1|
+| ELKVM | No | 10.0.0.1 |
 
 ### Elk Configuration
 
 Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because...
-- _TODO: What is the main advantage of automating configuration with Ansible?_
+- _TODO: What is the main advantage of automating configuration with Ansible?
+ - automate configuration will save time
+ - multiple tasks can be perfomred at the same time
+ - reduces configuration errors
+ - can limit running services
+ - application intallation can be streamlined
 
 The playbook implements the following tasks:
 - _TODO: In 3-5 bullets, explain the steps of the ELK installation play. E.g., install Docker; download image; etc._
-- ...
-- ...
+ - The playbook installs docker.io: installs docker to the server
+ - Install Python3_pip: Python3_pip allows additional docker to be installed without errors
+ - Install docker python module: Installs the required docker modules
+ - Increase memory: Fix low in memory issues with the ELKVM
+ - Download and launch ELK Container: downloads the ELK container and launches it with the 5601 port.
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
@@ -133,9 +143,11 @@ The following screenshot displays the result of running `docker ps` after succes
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
 - _TODO: List the IP addresses of the machines you are monitoring_
-
+ - 10.1.0.160
+ - 10.1.0.170
 We have installed the following Beats on these machines:
 - _TODO: Specify which Beats you successfully installed_
+- Metricbeat and filebeat
 
 These Beats allow us to collect the following information from each machine:
 - _TODO: In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc._
